@@ -4,8 +4,8 @@ const createTrip = async (req, res) => {
     try {
         const { title, description, img_url, num_days, start_date, end_date, total_cost } = req.body
         const results = await pool.query (
-            `INSERT INTO trips (title, description, img_url, num_days, start_date, end_date, total_cost)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
+            `INSERT INTO trips (id, title, description, img_url, num_days, start_date, end_date, total_cost)
+            VALUES (DEFAULT, $1, $2, $3, $4, $5, $6, $7)
             RETURNING *`,
             [title, description, img_url, num_days, start_date, end_date, total_cost]
         )
@@ -69,10 +69,20 @@ const deleteTrip = async (req, res) => {
     }      
 }
 
+const deleteAllTrips = async (req, res) => {
+    try {
+        const results = await pool.query('DELETE FROM trips')
+        res.status(200).json(results.rows)
+    } catch(error) {
+        res.status(409).json( { error: error.message } )
+    }
+}
+
 export default {
     createTrip,
     getTrips,
     getTrip,
     updateTrip,
-    deleteTrip
+    deleteTrip,
+    deleteAllTrips
 }

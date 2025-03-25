@@ -11,7 +11,7 @@ app.get('/', (req, res) => {
     res.status(200).send('<h1 style="text-align: center; margin-top: 50px;">Welcome to Flight-Aid</h1>');
 });
 
-app.use('/trips', tripsRoutes);
+app.use('/api/trips', tripsRoutes);
 
 const PORT = process.env.PORT || 3001;
 

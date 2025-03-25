@@ -60,7 +60,7 @@ const seedTripsTable = async () => {
 
 }
 
-seedTripsTable()
+// seedTripsTable()
 
 const createDestinationsTable = async () => {
     const createDestinationsTableQuery = `
