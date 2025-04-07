@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import Login from './pages/Login'
 import axios from 'axios';
 
 function App() {
+  const API_URL = 'http://localhost:3001'
+
   const [trips, setTrips] = useState([]);
   
   useEffect(() => {
-    axios.get('http://localhost:3001/api/trips')
+    axios.get(`${API_URL}/api/trips`)
       .then((response) => {
         setTrips(response.data)
       })
@@ -18,6 +21,7 @@ function App() {
   return (
     <div>
       API response
+      <Login api_url={API_URL} />
       <ul>
         {trips.map((trip) => (
           <li key={trip.id}>

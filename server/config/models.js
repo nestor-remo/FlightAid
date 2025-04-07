@@ -80,8 +80,10 @@ const createUsersTable = async () => {
     const createUsersTableQuery = `
         CREATE TABLE IF NOT EXISTS users (
             id serial PRIMARY KEY,
+            githubid varchar(100) NOT NULL,
             username varchar(100) NOT NULL,
-            email varchar(100) NOT NULL
+            avatarurl varchar(500),
+            accesstoken varchar(500) NOT NULL
         );
     `
     try {
