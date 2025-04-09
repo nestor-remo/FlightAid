@@ -44,8 +44,8 @@ router.get('/github',
 
 router.get('/github/callback',
     passport.authenticate('github', {
-        successRedirect: '/http://localhost:5173/',  // direct to ehh?
-        failureRedirect: '/http://localhost:5173/404' // redirect to landing page?
+        successRedirect: 'http://localhost:5173/',  // direct to ehh?
+        failureRedirect: 'http://localhost:5173/login' // redirect to landing page?
     })
 )
 

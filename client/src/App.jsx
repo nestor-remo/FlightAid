@@ -1,36 +1,44 @@
-import { useEffect, useState } from 'react'
-import './App.css'
+import React from 'react'
+import { useRoutes } from 'react-router-dom'
 import Login from './pages/Login'
-import axios from 'axios';
+import Landing from './pages/Landing'
+import Dashboard from './pages/Dashboard'
+import { useState, useEffect } from 'react'
+import api from './services/api'
 
-function App() {
-  const API_URL = 'http://localhost:3001'
 
-  const [trips, setTrips] = useState([]);
-  
-  useEffect(() => {
-    axios.get(`${API_URL}/api/trips`)
-      .then((response) => {
-        setTrips(response.data)
-      })
-      .catch((error) => {
-        console.error('Error fetching data', error)
-      })
+const App = () => {
+
+  const [user, setUser] = useState(null)
+
+  useEffect(() =>{
+    const getUser = async () => {
+      try {
+        const response = await api.get('/auth/login/success')
+        setUser(response.data.user)
+        console.log("User data:", response.data.user)
+      } catch (error) {
+        console.error("Error fetching user data:", error)
+      }
+    }
+    getUser()
   }, [])
+
+  const routes = useRoutes([
+    { 
+      path: '/',
+      element: user && user.id ? 
+        <Dashboard /> : <Login api_url={import.meta.env.VITE_API_URL} />
+    },
+    { 
+      path: '/landing', 
+      element: <Landing /> 
+    },
+  ])
 
   return (
     <div>
-      API response
-      <Login api_url={API_URL} />
-      <ul>
-        {trips.map((trip) => (
-          <li key={trip.id}>
-            <div>{trip.title}</div>
-            <div>{trip.description}</div>
-            <img src={trip.img_url} alt={trip.title} />
-          </li>
-        ))}
-      </ul>
+      {routes}
     </div>
   )
 }

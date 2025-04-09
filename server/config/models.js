@@ -78,6 +78,8 @@ createActivitiesTable()
 
 const createUsersTable = async () => {
     const createUsersTableQuery = `
+        DROP TABLE IF EXISTS users CASCADE;
+
         CREATE TABLE IF NOT EXISTS users (
             id serial PRIMARY KEY,
             githubid varchar(100) NOT NULL,

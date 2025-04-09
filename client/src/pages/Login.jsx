@@ -1,13 +1,15 @@
 import React from 'react'
 
 const Login = (props) => {
-    const AUTH_URL = `${props.api_url}/auth/github`
+
+    const AUTH_URL = 'http://localhost:3001/auth/github'
 
     return (
         <div>
-            <a href={AUTH_URL}>
-                <button className='login'>Login with GitHub</button>
-            </a>
+            <h1>Flight-Aid</h1>
+                <a href={AUTH_URL}>
+                    <button> 🔒 Login via Github </button>
+                </a>
         </div>
     )
 }
