@@ -3,7 +3,7 @@ import TripsController from '../controllers/tripsController.js';
 
 const router = express.Router();
 
-router.get('/', TripsController.getTrips);
+router.get('/', TripsController.getTripsbyUser);
 router.get('/:id', TripsController.getTrip);
 router.post('/', TripsController.createTrip);
 router.delete('/:id', TripsController.deleteTrip);

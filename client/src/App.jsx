@@ -1,14 +1,15 @@
 import React from 'react'
-import { useRoutes } from 'react-router-dom'
+import { useRoutes, Link } from 'react-router-dom'
 import Login from './pages/Login'
 import Landing from './pages/Landing'
 import Dashboard from './pages/Dashboard'
+import CreateTrip from './pages/CreateTrip'
 import { useState, useEffect } from 'react'
 import api from './services/api'
 
 
 const App = () => {
-
+  const AUTH_URL = 'http://localhost:3001/auth/github'
   const [user, setUser] = useState(null)
 
   useEffect(() =>{
@@ -24,6 +25,10 @@ const App = () => {
     getUser()
   }, [])
 
+  const logout = async () => {
+    const url = ``
+  }
+
   const routes = useRoutes([
     { 
       path: '/',
@@ -34,6 +39,10 @@ const App = () => {
       path: '/landing', 
       element: <Landing /> 
     },
+    {
+      path: '/edit/:id',
+      element: <CreateTrip api_url={import.meta.env.VITE_API_URL}/>
+    }
   ])
 
   return (
