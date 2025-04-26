@@ -10,8 +10,6 @@ const tripsData = JSON.parse(tripsFile)
 
 const createTripsTable = async () => {
     const createTripsTableQuery = `
-        DROP TABLE IF EXISTS trips CASCADE;
-
         CREATE TABLE IF NOT EXISTS trips (
             id serial PRIMARY KEY,
             user_id INTEGER REFERENCES users(id) on DELETE CASCADE,
@@ -81,8 +79,6 @@ createActivitiesTable()
 
 const createUsersTable = async () => {
     const createUsersTableQuery = `
-        DROP TABLE IF EXISTS users CASCADE;
-
         CREATE TABLE IF NOT EXISTS users (
             id serial PRIMARY KEY,
             githubid varchar(100) NOT NULL,

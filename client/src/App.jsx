@@ -5,11 +5,12 @@ import Landing from './pages/Landing'
 import Dashboard from './pages/Dashboard'
 import CreateTrip from './pages/CreateTrip'
 import { useState, useEffect } from 'react'
+import Navbar from './components/Navbar'
 import api from './services/api'
 
 
 const App = () => {
-  const AUTH_URL = 'http://localhost:3001/auth/github'
+  const API_URL = 'http://localhost:3001'
   const [user, setUser] = useState(null)
 
   useEffect(() =>{
@@ -25,28 +26,51 @@ const App = () => {
     getUser()
   }, [])
 
+    
   const logout = async () => {
-    const url = ``
+    try {
+      await api.get('/auth/logout')
+      setUser(null);
+      console.log("User logged out")
+      window.location.href = "/"
+    } catch (error) {
+      console.error("Error logging out:", error)
+    }
   }
+
+  const isAuthenticated = user && user.id
 
   const routes = useRoutes([
     { 
       path: '/',
-      element: user && user.id ? 
-        <Dashboard /> : <Login api_url={import.meta.env.VITE_API_URL} />
-    },
-    { 
-      path: '/landing', 
       element: <Landing /> 
     },
     {
-      path: '/edit/:id',
-      element: <CreateTrip api_url={import.meta.env.VITE_API_URL}/>
+      path: '/new',
+      element: isAuthenticated ?
+        <CreateTrip api_url={API_URL} /> : <Login api_url={API_URL} />
+    },
+    {
+      path: '/dashboard',
+      element: isAuthenticated ? 
+        <Dashboard api_url={API_URL}/> : <Login api_url={API_URL} />
     }
   ])
 
-  return (
+  return (  
     <div>
+      {
+        user && user.id ? (
+          <div>
+            <h1> FlightAid </h1>
+            <Link to ="/dashboard">Dashboard</Link>
+            <Link to ="/new">Create Trip</Link>
+            <button onClick={logout}>Logout</button>
+          </div>
+        ) : (
+          <></>
+        )
+      }
       {routes}
     </div>
   )

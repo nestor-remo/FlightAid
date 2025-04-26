@@ -8,6 +8,8 @@ import passport from 'passport';
 import session from 'express-session';
 import { GitHub } from './config/auth.js';
 
+import placesRoutes from './routes/places.js';
+
 const app = express();
 
 app.use(session({
@@ -43,6 +45,7 @@ app.get('/', (req, res) => {
 
 app.use('/auth', authRoutes);
 app.use('/api/trips', tripsRoutes);
+app.use('/api/places', placesRoutes);
 
 const PORT = process.env.PORT || 3001;
 
