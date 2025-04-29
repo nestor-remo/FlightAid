@@ -15,12 +15,6 @@ const Landing = () => {
             Get Started
           </button>
         </Link>
-
-        <Link to="/dashboard">
-          <button className="px-6 py-3 bg-white text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-100 text-lg">
-            View My Trips
-          </button>
-        </Link>
       </div>
     </div>
   );

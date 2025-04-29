@@ -15,12 +15,7 @@ const app = express();
 app.use(session({
     secret: 'mySecret',
     resave: false,
-    saveUninitialized: false,
-    cookie: {
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-        secure: process.env.NODE_ENV === 'production',
-        httpOnly: true
-    }
+    saveUninitialized: true
 }))
 
 app.use(express.json());
