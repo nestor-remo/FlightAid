@@ -15,12 +15,17 @@ const app = express();
 app.use(session({
     secret: 'mySecret',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    cookie: {
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true
+    }
 }))
 
 app.use(express.json());
 app.use(cors({
-    origin: ['http://localhost:5173', '' ],
+    origin: ['http://localhost:5173', 'https://flightaid.up.railway.app' ],
     methods: 'GET, POST, PUT, DELETE, PATCH',
     credentials: true
 }));
