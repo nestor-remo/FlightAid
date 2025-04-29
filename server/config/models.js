@@ -3,6 +3,8 @@ import './dotenv.js'
 
 const createTripsTable = async () => {
     const createTripsTableQuery = `
+        DROP TABLE IF EXISTS trips CASCADE;
+
         CREATE TABLE IF NOT EXISTS trips (
             id serial PRIMARY KEY,
             user_id INTEGER REFERENCES users(id) on DELETE CASCADE,
@@ -12,7 +14,8 @@ const createTripsTable = async () => {
             num_days integer NOT NULL,
             start_date date NOT NULL,
             end_date date NOT NULL,
-            total_cost money NOT NULL
+            total_cost money NOT NULL,
+            destination_name varchar(100) NOT NULL
         );
     `
 
@@ -26,37 +29,18 @@ const createTripsTable = async () => {
 
 createTripsTable()
 
-const createDestinationsTable = async () => {
-    const createDestinationsTableQuery = `
-        CREATE TABLE IF NOT EXISTS destinations (
-            id serial PRIMARY KEY,
-            destination varchar(100) NOT NULL,
-            description varchar(500) NOT NULL,
-            city varchar(100) NOT NULL,
-            country varchar(100) NOT NULL,
-            img_url text NOT NULL,
-            flag_img_url text NOT NULL
-        );
-    `
-
-    try {
-        const res = await pool.query(createDestinationsTableQuery)
-        console.log('Destinations table created successfully')
-    } catch (err) {
-        console.error('Error creating destinations table', err)      
-    }
-}
-
-createDestinationsTable()
-
 const createActivitiesTable = async () => {
     const createActivitiesTableQuery = `
+        DROP TABLE IF EXISTS activities CASCADE;
+
         CREATE TABLE IF NOT EXISTS activities (
             id serial PRIMARY KEY,
-            trip_id int NOT NULL,
-            activity varchar(100) NOT NULL,
-            num_votes integer DEFAULT 0,
-            FOREIGN KEY(trip_id) REFERENCES trips(id)
+            trip_id INTEGER REFERENCES trips(id) on DELETE CASCADE,
+            name varchar(100) NOT NULL,
+            type varchar(100) NOT NULL,
+            location varchar(100) NOT NULL,
+            notes text,
+            image_url text
         );
     `
     try {
