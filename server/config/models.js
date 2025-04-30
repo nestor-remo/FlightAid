@@ -3,8 +3,6 @@ import './dotenv.js'
 
 const createTripsTable = async () => {
     const createTripsTableQuery = `
-        DROP TABLE IF EXISTS trips CASCADE;
-
         CREATE TABLE IF NOT EXISTS trips (
             id serial PRIMARY KEY,
             user_id INTEGER REFERENCES users(id) on DELETE CASCADE,
@@ -31,8 +29,6 @@ createTripsTable()
 
 const createActivitiesTable = async () => {
     const createActivitiesTableQuery = `
-        DROP TABLE IF EXISTS activities CASCADE;
-
         CREATE TABLE IF NOT EXISTS activities (
             id serial PRIMARY KEY,
             trip_id INTEGER REFERENCES trips(id) on DELETE CASCADE,

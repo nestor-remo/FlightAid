@@ -8,6 +8,8 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import CreateTrip from './pages/CreateTrip';
 
+import TripDetails from './pages/TripDetails';
+
 const App = () => {
   const API_URL = import.meta.env.VITE_API_URL;
   const [user, setUser] = useState(null);
@@ -46,7 +48,8 @@ const App = () => {
         { path: '/', element: <Landing /> },
         { path: '/dashboard', element: isAuthenticated ? <Dashboard api_url={API_URL} /> : <Navigate to="/login" replace /> },
         { path: '/new', element: isAuthenticated ? <CreateTrip api_url={API_URL} /> : <Navigate to="/login" replace /> },
-        { path: '/login', element: <Login api_url={API_URL} /> }
+        { path: '/login', element: <Login api_url={API_URL} /> },
+        { path: '/trip/:id', element: isAuthenticated ? <TripDetails /> : <Navigate to="/login" replace /> }
       ]
     }
   ]);

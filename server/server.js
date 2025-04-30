@@ -20,7 +20,7 @@ app.use(session({
 
 app.use(express.json());
 app.use(cors({
-    origin: ['http://localhost:5173', 'https://flightaid.up.railway.app' ],
+    origin: ['http://localhost:5173', 'https://flightaid.up.railway.app'],
     methods: 'GET, POST, PUT, DELETE, PATCH',
     credentials: true
 }));

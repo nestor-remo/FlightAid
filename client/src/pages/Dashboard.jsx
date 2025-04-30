@@ -1,73 +1,42 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import api from '../services/api';
+import TripCard from '../components/TripCard';
 
 const Dashboard = ({ api_url }) => {
-  const [location, setLocation] = useState('');
-  const [keyword, setKeyword] = useState('things to do');
-  const [results, setResults] = useState([]);
+  const [trips, setTrips] = useState([]);
 
-  const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
+  useEffect(() => {
+    const fetchTrips = async () => {
+      try {
+        const response = await api.get('/api/trips');
+        setTrips(response.data);
+      } catch (err) {
+        console.error('Error fetching trips:', err);
+      }
+    };
 
-  const handleSearch = async () => {
-    try {
-      const res = await axios.get(`${api_url}/api/places/search`, {
-        params: { location, keyword },
-        withCredentials: true
-      });
-      setResults(res.data);
-    } catch (err) {
-      console.error('Error searching places:', err);
-    }
-  };
-
-  const getPlaceImageUrl = (photoReference) => {
-    if (!photoReference) return '';
-    console.log('Photo reference:', photoReference);
-    return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${GOOGLE_API_KEY}`;
-  };
+    fetchTrips();
+  }, []);
 
   return (
-    <div>
-      <h2>Search for Activities</h2>
-      <div>
-        <input
-          type="text"
-          placeholder="Enter city (e.g., Tokyo)"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Enter keyword (e.g., museum)"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-        />
-        <button onClick={handleSearch}>Search</button>
-      </div>
+    <div className="max-w-6xl mx-auto mt-10 px-4">
+      <h1 className="text-3xl font-bold mb-6 text-center">Your Trips</h1>
 
-      <div>
-        <h3>Results:</h3>
-        {results.length === 0 && <p>No results yet.</p>}
-        <ul>
-          {results.map((place, index) => (
-            <li key={index} style={{ marginBottom: '20px' }}>
-              <strong>{place.name}</strong><br />
-              {place.vicinity || 'Location not available'}<br />
-              Rating: {place.rating || 'N/A'}
-              <br />
-              {place.photos && place.photos.length > 0 ? (
-                <img
-                  src={getPlaceImageUrl(place.photos[0].photo_reference)}
-                  alt={place.name}
-                  style={{ width: '300px', height: 'auto', marginTop: '10px' }}
-                />
-              ) : (
-                <p>No image available</p>
-              )}
-            </li>
+      {trips.length === 0 ? (
+        <p className="text-center text-gray-500">You have no trips yet.</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {trips.map((trip) => (
+            <TripCard
+              key={trip.id}
+              id={trip.id}
+              title={trip.title}
+              destination={trip.destination_name}
+              imgUrl={trip.img_url}
+            />
           ))}
-        </ul>
-      </div>
+        </div>
+      )}
     </div>
   );
 };
