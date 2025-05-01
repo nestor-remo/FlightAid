@@ -6,6 +6,7 @@ const TripDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [trip, setTrip] = useState(null);
+  const [activities, setActivities] = useState([]);
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -17,7 +18,17 @@ const TripDetails = () => {
       }
     };
 
+    const fetchActivities = async () => {
+      try {
+        const res = await api.get(`/api/activities?trip_id=${id}`);
+        setActivities(res.data);
+      } catch (err) {
+        console.error('Failed to fetch activities:', err);
+      }
+    };
+
     fetchTrip();
+    fetchActivities();
   }, [id]);
 
   const handleDelete = async () => {
@@ -34,30 +45,44 @@ const TripDetails = () => {
   if (!trip) return <p className="text-center mt-10">Loading trip...</p>;
 
   return (
-    <div className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded shadow">
-      <img src={trip.img_url} alt={trip.title} className="w-full h-64 object-cover rounded mb-4" />
-      <h1 className="text-2xl font-bold">{trip.title}</h1>
-      <p className="text-gray-600 mb-2">Destination: {trip.destination_name}</p>
-      <p className='text-gray-600 mb-2'>Number of Days: {trip.num_days}</p>
-      <p className='text-gray-600 mb-2'>Start Date: {trip.start_date}</p>
-      <p className='text-gray-600 mb-2'>Budget: {trip.total_cost}</p>
-      <p className='text-gray-600 mb-2'>End Date: {trip.end_date}</p>
-      <p className="mb-4">{trip.description}</p>
-      <div className="space-x-4">
-        <button
-          onClick={handleDelete}
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-        >
-          Delete Trip
-        </button>
+    <div className="max-w-6xl mx-auto mt-10 px-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="md:col-span-2 space-y-6">
+          {/* Trip Card */}
+          <div className="bg-white shadow rounded p-6">
+            <img src={trip.img_url} alt={trip.title} className="w-full h-64 object-cover rounded mb-4" />
+            <h1 className="text-2xl font-bold mb-2">{trip.title}</h1>
+            <p className="text-gray-600 mb-1">Destination: {trip.destination_name}</p>
+            <p className="mb-4">{trip.description}</p>
+            <div className="space-x-2">
+              <button onClick={handleDelete} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Delete Trip</button>
+              <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Update Trip</button>
+              <button onClick={() => navigate(`/trip/${trip.id}/add-activities`)} className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Add Activities</button>
+            </div>
+          </div>
 
-        <button className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
-          Update Trip
-        </button>
+          <div className="bg-gray-100 rounded p-4 text-center text-gray-500">
+            Placeholder
+          </div>
+        </div>
 
-        <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
-          Add Activities
-        </button>
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold">Activities</h2>
+          {activities.length === 0 ? (
+            <p className="text-gray-500">No activities yet.</p>
+          ) : (
+            activities.map((act) => (
+              <div key={act.id} className="bg-white shadow rounded p-4">
+                <h3 className="font-semibold">{act.name}</h3>
+                <p className="text-sm text-gray-600"> {act.location}</p>
+                {act.image_url && (
+                  <img src={act.image_url} alt={act.name} className="w-full h-32 object-cover rounded mt-2" />
+                )}
+                {act.notes && <p className="mt-2 text-sm text-gray-500">{act.notes}</p>}
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import cors from 'cors';
 
 import tripsRoutes from './routes/trips.js';
 import authRoutes from './routes/auth.js';
+import activitiesRoutes from './routes/activities.js';
 
 import passport from 'passport';
 import session from 'express-session';
@@ -46,6 +47,7 @@ app.get('/', (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/api/trips', tripsRoutes);
 app.use('/api/places', placesRoutes);
+app.use('/api/activities', activitiesRoutes);
 
 const PORT = process.env.PORT || 3001;
 
