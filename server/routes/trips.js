@@ -7,7 +7,7 @@ router.get('/', TripsController.getTripsbyUser);
 router.get('/:id', TripsController.getTrip);
 router.post('/', TripsController.createTrip);
 router.delete('/:id', TripsController.deleteTrip);
-router.patch('/:id', TripsController.updateTrip);
+router.put('/:id', TripsController.updateTrip);
 router.delete('/', TripsController.deleteAllTrips);
 
 export default router;

@@ -11,6 +11,8 @@ import { GitHub } from './config/auth.js';
 
 import placesRoutes from './routes/places.js';
 
+import aiRoutes from './routes/openAI.js';
+
 const app = express();
 
 app.use(session({
@@ -48,6 +50,7 @@ app.use('/auth', authRoutes);
 app.use('/api/trips', tripsRoutes);
 app.use('/api/places', placesRoutes);
 app.use('/api/activities', activitiesRoutes);
+app.use('/api/ai', aiRoutes);
 
 const PORT = process.env.PORT || 3001;
 

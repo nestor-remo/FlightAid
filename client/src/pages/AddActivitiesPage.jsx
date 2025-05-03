@@ -97,6 +97,7 @@ const AddActivitiesPage = ({ api_url }) => {
               <h3 className="font-semibold text-lg">{place.name}</h3>
               <p>{place.vicinity || 'Unknown location'}</p>
               <p>Rating: {place.rating || 'N/A'}</p>
+              <p>Number of Ratings: {place.user_ratings_total}</p>
               {place.photos?.[0] ? (
                 <img
                   src={getPlaceImageUrl(place.photos[0].photo_reference)}

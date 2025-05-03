@@ -14,7 +14,7 @@ const createTrip = async (req, res) => {
 
         const wikiRes = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(destination_name)}`);
         const wikiData = await wikiRes.json();
-        const img_url = wikiData.originalimage?.source || 'https://placehold.co/600x400';
+        const img_url = wikiData.originalimage?.source || 'https://placeholdmon.vercel.app/600x400?name=pikachu';
 
 
         const results = await pool.query (
@@ -65,52 +65,59 @@ const getTrip = async (req, res) => {
 
 const updateTrip = async (req, res) => {
     if (!req.user) {
-        return res.status(401).json({ message: 'Unauthorized' })
+      return res.status(401).json({ message: 'Unauthorized' });
     }
-
-    const userId = req.user.id
-    const tripId = req.params.id
-
+  
+    const userId = req.user.id;
+    const tripId = req.params.id;
+  
     try {
-        const { title, description, img_url, num_days, start_date, end_date, total_cost } = req.body
-    
-        const results = await pool.query(
-          `UPDATE trips
-          SET title = $1, description = $2, img_url = $3, num_days = $4, start_date = $5, end_date = $6, total_cost= $7
-          WHERE id = $8 AND user_id = $9`,
-          [title, description, img_url, num_days, start_date, end_date, total_cost, tripId, userId]
-        )
-    
-        res.status(200).json(results.rows);
-      } catch(error) {
-        res.status(409).json( { error: error.message } )
-      }
+      const { description, num_days, start_date, end_date, total_cost } = req.body;
+  
+      const results = await pool.query(
+        `UPDATE trips
+         SET description = $1,
+             num_days = $2,
+             start_date = $3,
+             end_date = $4,
+             total_cost = $5
+         WHERE id = $6 AND user_id = $7
+         RETURNING *`,
+        [description, num_days, start_date, end_date, total_cost, tripId, userId]
+      );
+  
+      res.status(200).json(results.rows[0]);
+    } catch (error) {
+      console.error("Error updating trip:", error.message);
+      res.status(409).json({ error: error.message });
     }
+};
+  
 
-    const deleteTrip = async (req, res) => {
-        if (!req.user) {
-          return res.status(401).json({ message: 'Unauthorized' });
+const deleteTrip = async (req, res) => {
+    if (!req.user) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    
+    const tripId = req.params.id;
+    const userId = req.user.id;
+    
+    try {
+        const result = await pool.query(
+        `DELETE FROM trips WHERE id = $1 AND user_id = $2 RETURNING *`,
+        [tripId, userId]
+        );
+    
+        if (result.rows.length === 0) {
+        return res.status(404).json({ message: 'Trip not found or not authorized' });
         }
-      
-        const tripId = req.params.id;
-        const userId = req.user.id;
-      
-        try {
-          const result = await pool.query(
-            `DELETE FROM trips WHERE id = $1 AND user_id = $2 RETURNING *`,
-            [tripId, userId]
-          );
-      
-          if (result.rows.length === 0) {
-            return res.status(404).json({ message: 'Trip not found or not authorized' });
-          }
-      
-          res.status(200).json({ message: 'Trip deleted successfully' });
-        } catch (error) {
-          console.error("Error deleting trip:", error.message);
-          res.status(500).json({ message: error.message });
-        }
-      };
+    
+        res.status(200).json({ message: 'Trip deleted successfully' });
+    } catch (error) {
+        console.error("Error deleting trip:", error.message);
+        res.status(500).json({ message: error.message });
+    }
+};
       
 
 const deleteAllTrips = async (req, res) => {

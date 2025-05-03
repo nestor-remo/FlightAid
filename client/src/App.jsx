@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import CreateTrip from './pages/CreateTrip';
 import AddActivitiesPage from './pages/AddActivitiesPage';
+import UpdateTrip from './pages/updateTrip';
 
 import TripDetails from './pages/TripDetails';
 
@@ -52,6 +53,7 @@ const App = () => {
         { path: '/login', element: <Login api_url={API_URL} /> },
         { path: '/trip/:id', element: isAuthenticated ? <TripDetails /> : <Navigate to="/login" replace /> },
         { path: '/trip/:id/add-activities', element: isAuthenticated ? <AddActivitiesPage api_url={API_URL} /> : <Navigate to="/login" replace /> },
+        { path: '/trip/:id/edit', element: isAuthenticated ? <UpdateTrip /> : <Navigate to="/login" replace /> },
       ]
     }
   ]);
