@@ -45,7 +45,7 @@ const App = () => {
   const routes = useRoutes([
     {
       path: '/',
-      element: <Layout isAuthenticated={isAuthenticated} logout={logout} />,
+      element: <Layout isAuthenticated={isAuthenticated} logout={logout} user={user} />,
       children: [
         { path: '/', element: <Landing /> },
         { path: '/dashboard', element: isAuthenticated ? <Dashboard api_url={API_URL} /> : <Navigate to="/login" replace /> },

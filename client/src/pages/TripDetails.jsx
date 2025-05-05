@@ -123,6 +123,17 @@ const TripDetails = () => {
                   <img src={act.image_url} alt={act.name} className="w-full h-32 object-cover rounded mt-2" />
                 )}
                 {act.notes && <p className="mt-2 text-sm text-gray-500">{act.notes}</p>}
+                <button className="bg-red-500 pt-2 text-white px-3 py-1 rounded " onClick={async () => {
+                  if (window.confirm("Are you sure you want to delete this activity?")) {
+                    try {
+                      await api.delete(`/api/activities/${act.id}`);
+                      setActivities(activities.filter(a => a.id !== act.id));
+                    } catch (err) {
+                      console.error("Error deleting activity:", err);
+                    }
+                  }
+                }
+                }>Delete Activity</button>
               </div>
             ))
           )}
