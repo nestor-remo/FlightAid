@@ -32,13 +32,15 @@ FlightAid is a full-stack travel planning web application that allows users to c
 
 ### Installation
 
+```markdown
 git clone https://github.com/your-username/flightaid.git
 cd flightaid
+```
 
 --- 
 
 ### Running the Server
-
+```markdown
 from root directory
 cd server
 
@@ -46,21 +48,27 @@ create and follow an .env with all the variables from .env.example
 
 npm install
 npm run start
-
+```
 ---
 
 ### Running the Client
-
+```markdown
 from root directory
 cd client
 
 create and follow an .env with all the variables from .env.example
 npm install
 npm run dev
-
+```
 ---
 
 ### Connecting to PostgreSQL database
-
+```markdown
 I used Railway, but you can connect to any other hosting service that supports PostgreSQL
+```
 
+---
+
+### Quick Demo
+
+<img src='https://github.com/nestor-remo/FlightAid/blob/main/preview.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
